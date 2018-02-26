@@ -84,12 +84,26 @@ public class servidor implements Runnable {
 
                 if (indiceCartaServer >= indiceCartaCliente) {
 
-                    loQueSale.writeUTF("Ohh, has perdido la apuesta de " + apuestaCliente);//W3
+                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) +".\nOhh, has perdido la apuesta de " + apuestaCliente);//W4
+                    PSP04_tarea.saldoBanca += apuestaCliente;//sumamos la cantidad a la banca
+                    loQueSale.writeUTF("¿Quieres volver a jugar?");//W5
+                    entrada = loQueEntra.readUTF();//R5
+                    
+                    if (!entrada.toLowerCase().contains("si")) {
+                        loQueSale.writeUTF("¡Hasta Pronto!");//W6
+                    }
 
                 } else {
 
-                    loQueSale.writeUTF("Enhorabuena has ganado " + apuestaCliente);//W3
-                    PSP04_tarea.saldoBanca -= apuestaCliente;
+                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) +".\nEnhorabuena has ganado " + apuestaCliente);//W4
+                    PSP04_tarea.saldoBanca -= apuestaCliente;//restamos la cantidad a la banca
+                    loQueSale.writeUTF("¿Quieres volver a jugar?");//W5
+                    entrada = loQueEntra.readUTF();//R5
+                    
+                    if (!entrada.toLowerCase().contains("si")) {
+                        loQueSale.writeUTF("¡Hasta Pronto!");//W6
+                    }
+                    
                 }
 
             }
