@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package psp04_tarea;
+package main;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import servidor.servidor;
+import servidor.Servidor;
 
 /**
  *
  * @author Carlos
  */
-public class PSP04_tarea {
+public class Main {
 
     /**
      * @param args the command line arguments
@@ -38,12 +38,12 @@ public class PSP04_tarea {
             sc = ss.accept();//aceptamos la conexion y guardamos el socket
             
             //ejemplo de hilo
-            Thread hilo = new Thread(new servidor(sc));
+            Thread hilo = new Thread(new Servidor(sc));
             hilo.start();
             
         } catch (IOException ex) {
             
-            Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
             
         } 
         
