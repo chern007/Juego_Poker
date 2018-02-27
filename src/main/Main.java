@@ -23,7 +23,7 @@ public class Main {
      */
     
     
-    public static  int saldoBanca = 0;
+    public static  int saldoBanca = 1000;
     
     
     public static void main(String[] args) {
