@@ -19,7 +19,7 @@ import main.Main;
  *
  * @author Carlos H C
  */
-public class tusa implements Runnable {
+public class Server implements Runnable {
 
     Socket sc;
     String[] corazonesServer = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "AS"};
@@ -32,7 +32,7 @@ public class tusa implements Runnable {
 //    int saldoBanca = 0;
     boolean finJuego = false;
 
-    public tusa(Socket sc) {
+    public Server(Socket sc) {
 
         this.sc = sc;
 
@@ -118,7 +118,7 @@ public class tusa implements Runnable {
 
         } catch (IOException ex) {
 
-            Logger.getLogger(tusa.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
 
         }
     }
