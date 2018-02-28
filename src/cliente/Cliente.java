@@ -5,7 +5,13 @@
  */
 package cliente;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,22 +26,97 @@ public class Cliente {
 
     String[][] barajaCliente = {corazonesCliente, rombosCliente, trebolesCliente, picasCliente};
 
+    private static Scanner entrada = new Scanner(System.in);
+
     public static void main(String[] args) {
+
+        String nombreSaludo;
+        String respuesta;
+        int importe;
+        int[] cartasElegidas = new int[2];
+
+        try {
+
+            //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+            Socket sc = new Socket("localhost", 6060);
+
+            DataInputStream loQueEntra = new DataInputStream(sc.getInputStream());
+            DataOutputStream loQueSale = new DataOutputStream(sc.getOutputStream());
+            //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+            System.out.println("Introduce tu nombre:");
+
+            nombreSaludo = entrada.nextLine();
+            loQueSale.writeUTF(nombreSaludo);//W1 enviamos el nombre
+
+            System.out.println(loQueEntra.readUTF());//R1 recivimos el saludo del server
+
+            System.out.println(loQueEntra.readUTF());//R2 nos dice cuanto dinero queremos apostar
+
+            importe = entrada.nextInt();entrada.nextLine();//para finalizar la linea
+            loQueSale.writeInt(importe);//W2 enviamos el importe a apostar           
+
+            respuesta = loQueEntra.readUTF();//R3-->apuesta ACEPTADA o NO
+
+            System.out.println(respuesta);
+            if (respuesta.contains("no hay dinero")) {
+                return;
+            }
+
+            cartasElegidas = eligeCarta();
+
+            loQueSale.writeInt(cartasElegidas[0]);//W3 enviamos el palo
+            loQueSale.writeInt(cartasElegidas[1]);//W4 enviamos el numero     
+
+            respuesta = loQueEntra.readUTF();//R1-->RESULTADO Perdido o ganado
+            System.out.println(entrada);
+            if (respuesta.contains("perdido")) {
+
+                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?  
+
+                respuesta = entrada.nextLine().toLowerCase();
+                loQueSale.writeUTF(respuesta);//W1 le enviamos la respuesta
+
+                if (respuesta.contains("no")) {
+
+                    respuesta = loQueEntra.readUTF();//R3
+                    System.out.println(respuesta);//imprimimos la despedida
+                    return;
+
+                }
+
+            } else {
+
+                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?  
+
+                respuesta = entrada.nextLine().toLowerCase();
+                loQueSale.writeUTF(respuesta);//W1 le enviamos la respuesta
+
+                if (respuesta.contains("no")) {
+
+                    respuesta = loQueEntra.readUTF();//R3
+                    System.out.println(respuesta);//imprimimos la despedida
+                    return;
+                }
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
-    private int[] eligeCarta() {
+    private static int[] eligeCarta() {
 
         int[] carta = new int[2];
-        Scanner entrada = new Scanner(System.in);
         String palo = "*";
         String numero = "*";
 
-        System.out.println("Elige tu carta:\n");
-        System.out.println("Corazones(C), Rombos(R), Tréboles(T), Picas(P)");
-
+        System.out.println("Elige tu carta:");
+        System.out.println("\"Corazones(C), Rombos(R), Tréboles(T), Picas(P)\"");
+        
         do {
-            if (palo != "*") {
+            if (!palo.equals("*")) {
                 System.out.println("No has introducido un valor permitido, prueba otra vez.");
             }
             palo = entrada.nextLine().toLowerCase();
@@ -44,7 +125,7 @@ public class Cliente {
         System.out.println("Elige el número de la carta:\n\"2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, AS\"");
 
         do {
-            if (numero != "*") {
+            if (!numero.equals("*")) {
                 System.out.println("No has introducido un valor permitido, prueba otra vez.");
             }
             numero = entrada.nextLine().toLowerCase();
@@ -73,10 +154,14 @@ public class Cliente {
                 break;
 
             default:
-                throw new AssertionError();
+                System.out.println("NO HAS INTRODUCIDO CARACTERES PERMITIDOS.");
+                break;
         }
-
+        
         ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        
         switch (numero) {
             case "2":
 
@@ -85,67 +170,68 @@ public class Cliente {
                 break;
             case "3":
 
-                carta[0] = 1;
+                carta[1] = 1;
 
                 break;
             case "4":
 
-                carta[0] = 2;
+                carta[1] = 2;
 
                 break;
             case "5":
 
-                carta[0] = 3;
+                carta[1] = 3;
 
                 break;
             case "6":
 
-                carta[0] = 4;
+                carta[1] = 4;
 
                 break;
             case "7":
 
-                carta[0] = 5;
+                carta[1] = 5;
 
                 break;
             case "8":
 
-                carta[0] = 6;
+                carta[1] = 6;
 
                 break;
             case "9":
 
-                carta[0] = 7;
+                carta[1] = 7;
 
                 break;
             case "10":
 
-                carta[0] = 8;
+                carta[1] = 8;
 
                 break;
             case "J":
 
-                carta[0] = 9;
+                carta[1] = 9;
 
                 break;
             case "Q":
 
-                carta[0] = 10;
+                carta[1] = 10;
 
                 break;
             case "K":
 
-                carta[0] = 11;
+                carta[1] = 11;
 
                 break;
             case "AS":
 
-                carta[0] = 12;
+                carta[1] = 12;
 
                 break;
 
             default:
-                throw new AssertionError();
+                System.out.println("NO HAS INTRODUCIDO CARACTERES PERMITIDOS.");
+                break;
         }
 
         return carta;

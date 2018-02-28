@@ -19,7 +19,7 @@ import main.Main;
  *
  * @author Carlos H C
  */
-public class Servidor implements Runnable {
+public class tusa implements Runnable {
 
     Socket sc;
     String[] corazonesServer = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "AS"};
@@ -32,7 +32,7 @@ public class Servidor implements Runnable {
 //    int saldoBanca = 0;
     boolean finJuego = false;
 
-    public Servidor(Socket sc) {
+    public tusa(Socket sc) {
 
         this.sc = sc;
 
@@ -61,10 +61,12 @@ public class Servidor implements Runnable {
 
             apuestaCliente = loQueEntra.readInt();//R2
 
-            if (apuestaCliente > Main.saldoBanca) {
+            if (apuestaCliente > Main.banca.saldo()) {
 
                 //se termina el juego porque no tienme dinero la banca
                 loQueSale.writeUTF("No se ha aceptado tu apuesta porque no hay dinero suficiente en la banca.\nPrueba mas tarde.");//W3
+                sc.close();
+                return;
 
             } else {
 
@@ -84,41 +86,45 @@ public class Servidor implements Runnable {
 
                 if (indiceCartaServer >= indiceCartaCliente) {
 
-                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) +".\nOhh, has perdido la apuesta de " + apuestaCliente);//W4
-                    Main.saldoBanca += apuestaCliente;//sumamos la cantidad a la banca
-                    loQueSale.writeUTF("¿Quieres volver a jugar?");//W5
+                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) + ".\nOhh, has perdido la apuesta de " + apuestaCliente);//W4
+                    //Main.saldoBanca += apuestaCliente;//sumamos la cantidad a la banca
+                    Main.banca.meterDinero(apuestaCliente);//sumamos la cantidad a la banca
+                    loQueSale.writeUTF("¿Quieres volver a jugar? (si/no)");//W5
                     entrada = loQueEntra.readUTF();//R5
-                    
-                    if (!entrada.toLowerCase().contains("si")) {
+
+                    if (!entrada.contains("si")) {
                         loQueSale.writeUTF("¡Hasta Pronto!");//W6
+                        sc.close();
+                        finJuego = true;
                     }
 
                 } else {
 
-                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) +".\nEnhorabuena has ganado " + apuestaCliente);//W4
-                    Main.saldoBanca -= apuestaCliente;//restamos la cantidad a la banca
-                    loQueSale.writeUTF("¿Quieres volver a jugar?");//W5
+                    loQueSale.writeUTF("La máquina ha sacado la carta " + traduceCarta(carta) + ".\nEnhorabuena has ganado " + apuestaCliente);//W4
+                    //Main.saldoBanca -= apuestaCliente;//restamos la cantidad a la banca
+                    Main.banca.sacarDinero(apuestaCliente);//restamos la cantidad a la banca
+                    loQueSale.writeUTF("¿Quieres volver a jugar? (si/no)");//W5
                     entrada = loQueEntra.readUTF();//R5
-                    
-                    if (!entrada.toLowerCase().contains("si")) {
+
+                    if (!entrada.contains("si")) {
                         loQueSale.writeUTF("¡Hasta Pronto!");//W6
+                        sc.close();
+                        finJuego = true;
                     }
-                    
+
                 }
 
             }
 
         } catch (IOException ex) {
 
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(tusa.class.getName()).log(Level.SEVERE, null, ex);
 
         }
     }
 
     private int[] sacaCarta() {
 
-        int paloRandom;
-        int numeroRandom;
         String carta = "";
         int[] posicion = new int[2];
 
@@ -166,15 +172,14 @@ public class Servidor implements Runnable {
                 break;
 
             default:
-                
+
                 palo = "";
 
                 break;
         }
-        
+
         //----------------------------------------------------------------------
-        
-                switch (indicesCarta[1]) {
+        switch (indicesCarta[1]) {
 
             case 0:
 
@@ -205,69 +210,69 @@ public class Servidor implements Runnable {
                 numero = "6";
 
                 break;
-                
+
             case 5:
 
                 numero = "7";
 
                 break;
-                
+
             case 6:
 
                 numero = "8";
 
                 break;
-                
+
             case 7:
 
                 numero = "9";
 
                 break;
-                
+
             case 8:
 
                 numero = "10";
 
                 break;
-                
+
             case 9:
 
                 numero = "J";
 
                 break;
-                
+
             case 10:
 
                 numero = "Q";
 
                 break;
-                
+
             case 11:
 
                 numero = "K";
 
                 break;
-                
+
             case 12:
 
                 numero = "AS";
 
-                break;                
-            
+                break;
+
             default:
-                
+
                 numero = "";
 
                 break;
         }
-                
-                if (palo != "" && numero != "") {
-                    
-                    return numero + " de " + palo;
-            
-        }else{
-                    return "";
-                }
+
+        if (palo != "" && numero != "") {
+
+            return numero + " de " + palo;
+
+        } else {
+            return "";
+        }
 
     }
 
