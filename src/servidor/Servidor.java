@@ -17,7 +17,7 @@ import main.Main;
 
 /**
  *
- * @author Carlos
+ * @author Carlos H C
  */
 public class Servidor implements Runnable {
 
