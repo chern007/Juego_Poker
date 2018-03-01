@@ -35,6 +35,7 @@ public class Cliente {
         String continuamos;
         int importe;
         int[] cartasElegidas = new int[2];
+        boolean finJuego = false;
 
         try {
 
@@ -50,7 +51,9 @@ public class Cliente {
             nombreSaludo = entrada.nextLine();
             loQueSale.writeUTF(nombreSaludo);//W1 enviamos el nombre
 
-            System.out.println(loQueEntra.readUTF());//R1 recivimos el saludo del server
+            System.out.println(loQueEntra.readUTF());//R1 recivimos el saludo del server           
+            
+            while(!finJuego){
 
             System.out.println(loQueEntra.readUTF());//R2 nos dice cuanto dinero queremos apostar
 
@@ -64,10 +67,7 @@ public class Cliente {
                 return;
             }
 
-            cartasElegidas = eligeCarta();
-
-            loQueSale.writeInt(cartasElegidas[0]);//W3 enviamos el palo
-            loQueSale.writeInt(cartasElegidas[1]);//W4 enviamos el numero     
+   
 
             respuesta = loQueEntra.readUTF();//R1-->RESULTADO Perdido o ganado
             System.out.println(respuesta);
@@ -76,31 +76,38 @@ public class Cliente {
                 
                 System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?                
                 
-                continuamos = entrada.nextLine().toLowerCase();
+                do{
+                continuamos = entrada.nextLine().toLowerCase();                
+                }while(!continuamos.equals("si") && !continuamos.equals("no"));
                 loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
 
                 if (continuamos.contains("no")) {
 
                     respuesta = loQueEntra.readUTF();//R3
                     System.out.println(respuesta);//imprimimos la despedida
+                    finJuego = true;
                     return;
 
                 }
 
             } else {
 
-                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?  
-
+                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?
+                    
+                do{
                 continuamos = entrada.nextLine().toLowerCase();
+                }while(!continuamos.equals("si") && !continuamos.equals("no"));
                 loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
 
                 if (continuamos.contains("no")) {
 
                     respuesta = loQueEntra.readUTF();//R3
                     System.out.println(respuesta);//imprimimos la despedida
+                    finJuego = true;
                     return;
                 }
-            }
+            }            
+        }
 
         } catch (IOException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,7 +138,7 @@ public class Cliente {
                 System.out.println("No has introducido un valor permitido, prueba otra vez.");
             }
             numero = entrada.nextLine().toLowerCase();
-        } while (!numero.equals("2") && !numero.equals("3") && !numero.equals("4") && !numero.equals("5") && !numero.equals("6") && !numero.equals("7") && !numero.equals("8") && !numero.equals("9") && !numero.equals("10") && !numero.equals("J") && !numero.equals("Q") && !numero.equals("K") && !numero.equals("AS"));
+        } while (!numero.equals("2") && !numero.equals("3") && !numero.equals("4") && !numero.equals("5") && !numero.equals("6") && !numero.equals("7") && !numero.equals("8") && !numero.equals("9") && !numero.equals("10") && !numero.equals("j") && !numero.equals("q") && !numero.equals("k") && !numero.equals("as"));
 
         switch (palo) {
             case "c":
@@ -210,22 +217,22 @@ public class Cliente {
                 carta[1] = 8;
 
                 break;
-            case "J":
+            case "j":
 
                 carta[1] = 9;
 
                 break;
-            case "Q":
+            case "q":
 
                 carta[1] = 10;
 
                 break;
-            case "K":
+            case "k":
 
                 carta[1] = 11;
 
                 break;
-            case "AS":
+            case "as":
 
                 carta[1] = 12;
 
