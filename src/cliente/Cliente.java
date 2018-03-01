@@ -32,6 +32,7 @@ public class Cliente {
 
         String nombreSaludo;
         String respuesta;
+        String continuamos;
         int importe;
         int[] cartasElegidas = new int[2];
 
@@ -69,15 +70,16 @@ public class Cliente {
             loQueSale.writeInt(cartasElegidas[1]);//W4 enviamos el numero     
 
             respuesta = loQueEntra.readUTF();//R1-->RESULTADO Perdido o ganado
-            System.out.println(entrada);
+            System.out.println(respuesta);
+            
             if (respuesta.contains("perdido")) {
+                
+                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?                
+                
+                continuamos = entrada.nextLine().toLowerCase();
+                loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
 
-                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?  
-
-                respuesta = entrada.nextLine().toLowerCase();
-                loQueSale.writeUTF(respuesta);//W1 le enviamos la respuesta
-
-                if (respuesta.contains("no")) {
+                if (continuamos.contains("no")) {
 
                     respuesta = loQueEntra.readUTF();//R3
                     System.out.println(respuesta);//imprimimos la despedida
@@ -89,10 +91,10 @@ public class Cliente {
 
                 System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?  
 
-                respuesta = entrada.nextLine().toLowerCase();
-                loQueSale.writeUTF(respuesta);//W1 le enviamos la respuesta
+                continuamos = entrada.nextLine().toLowerCase();
+                loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
 
-                if (respuesta.contains("no")) {
+                if (continuamos.contains("no")) {
 
                     respuesta = loQueEntra.readUTF();//R3
                     System.out.println(respuesta);//imprimimos la despedida

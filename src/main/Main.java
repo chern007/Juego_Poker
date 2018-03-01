@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
 
         ServerSocket ss;
-        Socket sc;       
+        Socket sc;  
         
         
         try {
