@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package servidor;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -33,13 +33,15 @@ public class Main {
 
             ss = new ServerSocket(6060);
 
-//            while (true) {//bucle infinito para que espere conexiones
+            while (true) {//bucle infinito para que espere conexiones
                 sc = ss.accept();//aceptamos la conexion y guardamos el socket
 
+//                //ejemplo de hilo
+//                Thread hilo = new Thread(new Servidor(sc));
+//                hilo.start();
                 //ejemplo de hilo
-                Thread hilo = new Thread(new Servidor(sc));
-                hilo.start();
-//            }
+                new Thread(new Servidor(sc)).start();
+            }
 
         } catch (IOException ex) {
 

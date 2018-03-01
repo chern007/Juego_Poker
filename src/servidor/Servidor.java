@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import main.Main;
 
 /**
  *
@@ -68,6 +67,7 @@ public class Servidor implements Runnable {
 
                     //se termina el juego porque no tienme dinero la banca
                     loQueSale.writeUTF("No se ha aceptado tu apuesta porque no hay dinero suficiente en la banca.\nPrueba mas tarde.");//W3
+                    System.out.println(Main.banca.saldo());
                     sc.close();
                     return;
 
