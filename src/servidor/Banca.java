@@ -21,7 +21,7 @@ public class Banca {
         this.dinero += cantidad;
     }
 
-    public int saldo() {
+    public synchronized int saldo() {
         return this.dinero;
     }
 
