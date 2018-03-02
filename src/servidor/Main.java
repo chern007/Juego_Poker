@@ -8,6 +8,7 @@ package servidor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidor.Servidor;
@@ -26,9 +27,29 @@ public class Main {
     public static void main(String[] args) {
 
         ServerSocket ss;
-        Socket sc;  
+        Socket sc;
+
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Por favor, introduzca el saldo inicial del que dispondrá el servidor:");
+
+        int importe = 0;
+        //validamos el input
+        boolean valid = false;
+        while (!valid) {            
+            try {
+                importe = Integer.parseInt(entrada.nextLine());
+                if (importe >= 0) {
+                    valid = true;
+                }
+            } catch (NumberFormatException e) {
+                //error
+                System.out.println("No has introducido un valor numerico, por favor vuelve a intentarlo.");
+            }
+        }
         
-        
+        //metemos el dinero en la banca
+        banca.meterDinero(importe);
+
         try {
 
             ss = new ServerSocket(6060);
@@ -36,10 +57,6 @@ public class Main {
             while (true) {//bucle infinito para que espere conexiones
                 sc = ss.accept();//aceptamos la conexion y guardamos el socket
 
-//                //ejemplo de hilo
-//                Thread hilo = new Thread(new Servidor(sc));
-//                hilo.start();
-                //ejemplo de hilo
                 new Thread(new Servidor(sc)).start();
             }
 

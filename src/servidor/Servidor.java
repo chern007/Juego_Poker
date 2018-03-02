@@ -166,7 +166,7 @@ public class Servidor implements Runnable {
 
             case 2:
 
-                palo = "Treboles";
+                palo = "Tréboles";
 
                 break;
 
@@ -281,26 +281,4 @@ public class Servidor implements Runnable {
 
     }
 
-//    public static void main(String[] args) {
-//        
-//        
-//            ServerSocket ss;
-//            Socket sc;
-//            
-//        try {            
-//            
-//            ss = new ServerSocket(6060);
-//            sc = ss.accept();//aceptamos la conexion y guardamos el socket
-//            
-//            //ejemplo de hilo
-//            Thread hilo = new Thread(new servidor(sc));
-//            hilo.start();
-//            
-//        } catch (IOException ex) {
-//            
-//            Logger.getLogger(servidor.class.getName()).log(Level.SEVERE, null, ex);
-//            
-//        }
-//        
-//    }
 }

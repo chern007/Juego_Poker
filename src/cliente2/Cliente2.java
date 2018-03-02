@@ -34,7 +34,7 @@ public class Cliente2 {
         String nombreSaludo;
         String respuesta;
         String continuamos;
-        int importe;
+        int importe = 0;
         int[] cartasElegidas = new int[2];
         boolean finJuego = false;
 
@@ -52,63 +52,76 @@ public class Cliente2 {
             nombreSaludo = entrada.nextLine();
             loQueSale.writeUTF(nombreSaludo);//W1 enviamos el nombre
 
-            System.out.println(loQueEntra.readUTF());//R1 recivimos el saludo del server           
-            
-            while(!finJuego){
+            System.out.println(loQueEntra.readUTF());//R1 recibimos el saludo del server           
 
-            System.out.println(loQueEntra.readUTF());//R2 nos dice cuanto dinero queremos apostar
+            while (!finJuego) {
 
-            importe = entrada.nextInt();entrada.nextLine();//para finalizar la linea
-            loQueSale.writeInt(importe);//W2 enviamos el importe a apostar           
+                System.out.println(loQueEntra.readUTF());//R2 nos dice cuanto dinero queremos apostar                
 
-            respuesta = loQueEntra.readUTF();//R3-->apuesta ACEPTADA o NO
+                //validamos el input
+                boolean valid = false;
+                while (!valid) {
+                    try {
+                        importe = Integer.parseInt(entrada.nextLine());
+                        if (importe >= 0) {
+                            valid = true;
+                        } else {
+                            System.out.println("No se permiten números negativos.");
+                        }
+                    } catch (NumberFormatException e) {
+                        //error
+                        System.out.println("No has introducido un valor numérico, por favor vuelve a intentarlo.");
+                    }
+                }
+                
+                loQueSale.writeInt(importe);//W2 enviamos el importe a apostar           
 
-            System.out.println(respuesta);
-            if (respuesta.contains("no hay dinero")) {
-                return;
+                respuesta = loQueEntra.readUTF();//R3-->apuesta ACEPTADA o NO
+
+                System.out.println(respuesta);
+                if (respuesta.contains("no hay dinero")) {
+                    return;
+                }
+
+                respuesta = loQueEntra.readUTF();//R1-->RESULTADO Perdido o ganado
+                System.out.println(respuesta);
+
+                if (respuesta.contains("perdido")) {
+
+                    System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?                
+
+                    do {
+                        continuamos = entrada.nextLine().toLowerCase();
+                    } while (!continuamos.equals("si") && !continuamos.equals("no"));
+                    loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
+
+                    if (continuamos.contains("no")) {
+
+                        respuesta = loQueEntra.readUTF();//R3
+                        System.out.println(respuesta);//imprimimos la despedida
+                        finJuego = true;
+                        return;
+
+                    }
+
+                } else {
+
+                    System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?
+
+                    do {
+                        continuamos = entrada.nextLine().toLowerCase();
+                    } while (!continuamos.equals("si") && !continuamos.equals("no"));
+                    loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
+
+                    if (continuamos.contains("no")) {
+
+                        respuesta = loQueEntra.readUTF();//R3
+                        System.out.println(respuesta);//imprimimos la despedida
+                        finJuego = true;
+                        return;
+                    }
+                }
             }
-
-   
-
-            respuesta = loQueEntra.readUTF();//R1-->RESULTADO Perdido o ganado
-            System.out.println(respuesta);
-            
-            if (respuesta.contains("perdido")) {
-                
-                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?                
-                
-                do{
-                continuamos = entrada.nextLine().toLowerCase();                
-                }while(!continuamos.equals("si") && !continuamos.equals("no"));
-                loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
-
-                if (continuamos.contains("no")) {
-
-                    respuesta = loQueEntra.readUTF();//R3
-                    System.out.println(respuesta);//imprimimos la despedida
-                    finJuego = true;
-                    return;
-
-                }
-
-            } else {
-
-                System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?
-                    
-                do{
-                continuamos = entrada.nextLine().toLowerCase();
-                }while(!continuamos.equals("si") && !continuamos.equals("no"));
-                loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
-
-                if (continuamos.contains("no")) {
-
-                    respuesta = loQueEntra.readUTF();//R3
-                    System.out.println(respuesta);//imprimimos la despedida
-                    finJuego = true;
-                    return;
-                }
-            }            
-        }
 
         } catch (IOException ex) {
             Logger.getLogger(Cliente2.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,7 +137,7 @@ public class Cliente2 {
 
         System.out.println("Elige tu carta:");
         System.out.println("\"Corazones(C), Rombos(R), Tréboles(T), Picas(P)\"");
-        
+
         do {
             if (!palo.equals("*")) {
                 System.out.println("No has introducido un valor permitido, prueba otra vez.");
@@ -167,11 +180,10 @@ public class Cliente2 {
                 System.out.println("NO HAS INTRODUCIDO CARACTERES PERMITIDOS.");
                 break;
         }
-        
+
         ////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////
-        
         switch (numero) {
             case "2":
 

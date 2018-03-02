@@ -11,7 +11,7 @@ package servidor;
  */
 public class Banca {
 
-    int dinero = 1000;//empezamos con 1000 de saldo
+    int dinero = 0;//empezamos con 1000 de saldo
 
     public synchronized void sacarDinero(int cantidad) {
         this.dinero -= cantidad;
