@@ -33,9 +33,8 @@ public class Cliente2 {
 
         String nombreSaludo;
         String respuesta;
-        String continuamos;
+        String continuamos = "*";
         int importe = 0;
-        int[] cartasElegidas = new int[2];
         boolean finJuego = false;
 
         try {
@@ -73,7 +72,7 @@ public class Cliente2 {
                         System.out.println("No has introducido un valor numérico, por favor vuelve a intentarlo.");
                     }
                 }
-                
+
                 loQueSale.writeInt(importe);//W2 enviamos el importe a apostar           
 
                 respuesta = loQueEntra.readUTF();//R3-->apuesta ACEPTADA o NO
@@ -91,6 +90,9 @@ public class Cliente2 {
                     System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?                
 
                     do {
+                        if (!continuamos.equals("*")) {
+                            System.out.println("No has introducido un \"si\" o un \"no\", por favor vuelve a intentarlo:");
+                        }
                         continuamos = entrada.nextLine().toLowerCase();
                     } while (!continuamos.equals("si") && !continuamos.equals("no"));
                     loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta
@@ -109,6 +111,9 @@ public class Cliente2 {
                     System.out.println(loQueEntra.readUTF());//R2 vuelves a jugar?
 
                     do {
+                        if (!continuamos.equals("*")) {
+                            System.out.println("No has introducido un \"si\" o un \"no\", por favor vuelve a intentarlo:");
+                        }
                         continuamos = entrada.nextLine().toLowerCase();
                     } while (!continuamos.equals("si") && !continuamos.equals("no"));
                     loQueSale.writeUTF(continuamos);//W1 le enviamos la respuesta

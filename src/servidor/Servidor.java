@@ -67,7 +67,7 @@ public class Servidor implements Runnable {
 
                     //se termina el juego porque no tienme dinero la banca
                     loQueSale.writeUTF("No se ha aceptado tu apuesta porque no hay dinero suficiente en la banca.\nPrueba mas tarde.");//W3
-                    System.out.println(Main.banca.saldo());
+                    System.out.println(Main.banca.saldo() + " euros en la banca");
                     sc.close();
                     return;
 
@@ -92,8 +92,9 @@ public class Servidor implements Runnable {
                 if (indiceCartaServer >= indiceCartaCliente) {
 
                     loQueSale.writeUTF("Has sacado la carta " + traduceCarta(cartaCliente) + " y la máquina ha sacado la carta " + traduceCarta(cartaServer) + ".\nOhh, has perdido la apuesta de " + apuestaCliente  + " euros");//W4
-                    //Main.saldoBanca += apuestaCliente;//sumamos la cantidad a la banca
+                    
                     Main.banca.meterDinero(apuestaCliente);//sumamos la cantidad a la banca
+                    System.out.println(Main.banca.saldo() + " euros en la banca");
                     loQueSale.writeUTF("¿Quieres volver a jugar? (si/no)");//W5
                     entrada = loQueEntra.readUTF();//R5
 
@@ -106,8 +107,9 @@ public class Servidor implements Runnable {
                 } else {
 
                     loQueSale.writeUTF("Has sacado la carta " + traduceCarta(cartaCliente) + " y la máquina ha sacado la carta " + traduceCarta(cartaServer) + ".\nEnhorabuena has ganado " + apuestaCliente  + " euros");//W4
-                    //Main.saldoBanca -= apuestaCliente;//restamos la cantidad a la banca
+                    
                     Main.banca.sacarDinero(apuestaCliente);//restamos la cantidad a la banca
+                    System.out.println(Main.banca.saldo() + " euros en la banca");
                     loQueSale.writeUTF("¿Quieres volver a jugar? (si/no)");//W5
                     entrada = loQueEntra.readUTF();//R5
 

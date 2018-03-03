@@ -49,6 +49,7 @@ public class Main {
         
         //metemos el dinero en la banca
         banca.meterDinero(importe);
+        System.out.println("La banca dispone de un fondo de: " + banca.saldo() + " euros");
 
         try {
 
