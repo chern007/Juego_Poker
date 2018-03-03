@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cliente;
+package cliente2;
 
+import cliente.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,9 +18,7 @@ import java.util.logging.Logger;
  *
  * @author chern007
  */
-public class Cliente {
-
-    private static Scanner entrada = new Scanner(System.in);
+public class Cliente2 {
 
     String[] corazonesCliente = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "AS"};
     String[] rombosCliente = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "AS"};
@@ -125,48 +124,7 @@ public class Cliente {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-
-            Socket sc = new Socket("localhost", 6060);
-
-            DataInputStream loQueEntra = new DataInputStream(sc.getInputStream());
-            DataOutputStream loQueSale = new DataOutputStream(sc.getOutputStream());
-
-            System.out.println("Por favor introduzca su nombre:");
-            String nombre = entrada.nextLine();
-            //le mandamos el nombre del usuario
-            loQueSale.writeUTF(nombre);//W1
-
-            System.out.println(loQueEntra.readUTF());//R1 imprimimos el saludo
-
-            System.out.println(loQueEntra.readUTF());//R2 imprimimos la pregunta de cuanto dinero quiere apostar
-
-            System.out.println("Introduzca el importe que desea apostar:\n");
-            loQueSale.writeInt(entrada.nextInt());//W2
-
-            //vemos si ha aceptado la apuesta si no cerramos
-            String aceptacionDinero = loQueEntra.readUTF();//R3
-            if (aceptacionDinero.contains("no hay dinero suficiente")) {
-                System.out.println(aceptacionDinero);
-                return;
-            } else {
-                System.out.println(aceptacionDinero);
-            }
-
-            int[] cartaElegida = eligeCarta();
-            
-            
-            //seguir
-            
-            
-            
-            
-
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Cliente2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
